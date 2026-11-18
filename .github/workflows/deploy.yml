@@ -41,10 +41,9 @@ jobs:
           BASE_PATH: ${{ github.event.repository.name == format('{0}.github.io', github.repository_owner) && '/' || format('/{0}', github.event.repository.name) }}
 
       - name: Setup Pages
+        # Pages 必须先手动启用一次（Settings → Pages → Source: GitHub Actions）。
+        # GITHUB_TOKEN 无权创建 Pages 站点，所以不要依赖 enablement 参数。
         uses: actions/configure-pages@v5
-        with:
-          # 仓库首次部署时自动启用 Pages，省去手动点选
-          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
