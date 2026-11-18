@@ -4,6 +4,9 @@
   --vp-c-brand-3: #2b7fc9;
   --vp-c-brand-soft: rgba(24, 95, 165, 0.14);
 
+  /* 侧边栏与内容区同底色，靠分隔线区分，更接近文档站常见形态 */
+  --vp-sidebar-bg-color: var(--vp-c-bg);
+
   --vp-font-family-base:
     'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', ui-sans-serif, system-ui, sans-serif;
   --vp-font-family-mono:
@@ -13,6 +16,60 @@
 /* 中文长标题在侧边栏里换行更自然 */
 .VPSidebarItem .text {
   line-height: 1.55;
+}
+
+/* ------------------------------------------------------------------
+   页头与侧边栏
+
+   默认主题在两个地方不符合「页头通栏固定」：
+   1. .VPNav 只在 ≥960px 时 position: fixed，移动端会随页面滚走；
+   2. .VPSidebar 的 z-index(60) 高于 .VPNav(30)，抽屉打开时会把页头盖住。
+
+   注意：这些组件自带 scoped 样式（.VPNav[data-v-xxx]），单类选择器权重不够，
+   必须用 #app 前缀才能覆盖。
+   ------------------------------------------------------------------ */
+
+#app .VPNav {
+  position: fixed;
+  top: var(--vp-layout-top-height, 0px);
+  left: 0;
+  width: 100%;
+  z-index: calc(var(--vp-z-index-sidebar) + 10);
+}
+
+/* 导航脱离文档流后，内容区补上等高间距（桌面端原本就有，这里补齐移动端） */
+#app .VPContent {
+  padding-top: var(--vp-nav-height);
+}
+
+/* 抽屉从页头下方开始，首项不会被压住；桌面端原本就是同样的值 */
+#app .VPSidebar {
+  padding-top: var(--vp-nav-height);
+  border-right: 1px solid var(--vp-c-divider);
+}
+
+/* 移动端的「本页目录」条贴在页头下沿，而不是钻进页头里 */
+#app .VPLocalNav {
+  top: var(--vp-nav-height);
+}
+
+/* 遮罩不从页头开始，页头保持原样不被压暗 */
+#app .VPBackdrop {
+  top: var(--vp-nav-height);
+}
+
+/* 搜索框靠右，与参考布局一致；默认主题会把它挤在标题右侧。
+   只在桌面端生效，移动端要把位置留给汉堡按钮。 */
+@media (min-width: 960px) {
+  #app .VPNavBarSearch {
+    justify-content: flex-end;
+  }
+}
+
+/* 长中文标题按行均衡断行，避免最后一个字单独成行 */
+.note-title,
+.vp-doc h1 {
+  text-wrap: balance;
 }
 
 /* 代码块圆角，浅色主题下也有一点边界感 */
