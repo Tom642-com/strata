@@ -34,124 +34,32 @@ function select(tag: string) {
 </script>
 
 <template>
-  <div class="cloud">
+  <div class="tag-cloud">
     <button
       v-for="[tag, count] in tags"
       :key="tag"
       type="button"
-      class="chip"
-      :class="{ on: active === tag }"
+      class="tag-chip"
+      :class="{ 'is-active': active === tag }"
       @click="select(tag)"
     >
       #{{ tag }}
-      <span class="count">{{ count }}</span>
+      <span class="tag-chip__count">{{ count }}</span>
     </button>
   </div>
 
-  <p class="hint">
+  <p class="tag-cloud__hint">
     {{ active ? `已筛选：#${active}` : `共 ${tags.length} 个标签，点击筛选。` }}
   </p>
 
-  <ul class="list">
-    <li v-for="note in filtered" :key="note.url" class="item">
-      <div class="row">
-        <time class="date" :datetime="note.date">{{ note.date }}</time>
-        <a class="title" :href="withBase(note.url)">{{ note.title }}</a>
+  <ul class="entry-list">
+    <li v-for="note in filtered" :key="note.url" class="entry-item">
+      <div class="entry-row">
+        <time class="entry-date" :datetime="note.date">{{ note.date }}</time>
+        <a class="entry-name" :href="withBase(note.url)">{{ note.title }}</a>
       </div>
-      <p v-if="note.summary" class="summary">{{ note.summary }}</p>
+      <p v-if="note.summary" class="entry-summary">{{ note.summary }}</p>
     </li>
   </ul>
 </template>
 
-<style scoped>
-.cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1.25rem 0 0.75rem;
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.28rem 0.65rem;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 999px;
-  background: transparent;
-  font-size: 13px;
-  color: var(--vp-c-text-2);
-  cursor: pointer;
-  transition:
-    border-color 0.2s,
-    color 0.2s;
-}
-
-.chip:hover {
-  border-color: var(--vp-c-brand-1);
-  color: var(--vp-c-brand-1);
-}
-
-.chip.on {
-  border-color: var(--vp-c-brand-1);
-  background: var(--vp-c-brand-soft);
-  color: var(--vp-c-brand-1);
-}
-
-.count {
-  font-size: 11px;
-  color: var(--vp-c-text-3);
-}
-
-.hint {
-  margin: 0 0 1rem;
-  font-size: 13px;
-  color: var(--vp-c-text-3);
-}
-
-.list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.item {
-  padding: 0.7rem 0;
-  border-bottom: 1px solid var(--vp-c-divider-light);
-}
-
-.item:last-child {
-  border-bottom: none;
-}
-
-.row {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-}
-
-.date {
-  flex: none;
-  font-family: var(--vp-font-family-mono);
-  font-size: 12px;
-  color: var(--vp-c-text-3);
-}
-
-.title {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--vp-c-text-1);
-  text-decoration: none;
-}
-
-.title:hover {
-  color: var(--vp-c-brand-1);
-}
-
-.summary {
-  margin: 0.3rem 0 0;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--vp-c-text-2);
-}
-</style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useData } from 'vitepress';
 
 const { frontmatter, theme } = useData();
@@ -23,7 +23,38 @@ const tags = computed<string[]>(() =>
   Array.isArray(frontmatter.value.tags) ? frontmatter.value.tags.map(String) : [],
 );
 
-const verified = computed(() => frontmatter.value.verified !== false);
+/* ---- 正文字号：小 / 中 / 大，写入 html[data-read-size] 并持久化 ---- */
+type ReadSize = 'sm' | 'md' | 'lg';
+
+const SIZE_OPTIONS: { value: ReadSize; label: string; title: string }[] = [
+  { value: 'sm', label: '小', title: '小号正文' },
+  { value: 'md', label: '中', title: '中号正文（默认）' },
+  { value: 'lg', label: '大', title: '大号正文' },
+];
+
+const STORAGE_KEY = 'strata:read-size';
+
+const readSize = ref<ReadSize>('md');
+
+const apply = (value: ReadSize) => {
+  document.documentElement.dataset.readSize = value;
+};
+
+const setReadSize = (value: ReadSize) => {
+  readSize.value = value;
+  apply(value);
+  try {
+    localStorage.setItem(STORAGE_KEY, value);
+  } catch {
+    /* 隐私模式下写入失败不影响当前阅读 */
+  }
+};
+
+onMounted(() => {
+  // 首屏由 head 里的内联脚本先行设置，这里只做状态同步
+  const current = document.documentElement.dataset.readSize;
+  if (current === 'sm' || current === 'md' || current === 'lg') readSize.value = current;
+});
 </script>
 
 <template>
@@ -35,64 +66,25 @@ const verified = computed(() => frontmatter.value.verified !== false);
       <span>{{ topicLabel }}</span>
       <template v-if="tags.length">
         <span class="sep" aria-hidden="true">·</span>
-        <span class="tags">
-          <span v-for="tag in tags" :key="tag" class="tag">#{{ tag }}</span>
+        <span class="note-tags">
+          <span v-for="tag in tags" :key="tag" class="note-tag">#{{ tag }}</span>
         </span>
       </template>
-      <span v-if="!verified" class="badge" title="AI 初稿，尚未人工确认">待核实</span>
+
+      <div class="note-size" role="group" aria-label="正文字号">
+        <button
+          v-for="option in SIZE_OPTIONS"
+          :key="option.value"
+          type="button"
+          class="note-size__btn"
+          :class="{ 'is-active': readSize === option.value }"
+          :aria-pressed="readSize === option.value"
+          :title="option.title"
+          @click="setReadSize(option.value)"
+        >
+          {{ option.label }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-/*
- * 笔记正文从 ## 开始，一级标题由 frontmatter 提供。
- * VitePress 默认不会把 frontmatter.title 渲染成标题，所以在这里补上。
- */
-.note-head {
-  margin-bottom: 2rem;
-}
-
-.note-title {
-  margin: 0 0 0.75rem;
-  border-top: none;
-  padding-top: 0;
-  font-size: 2rem;
-  line-height: 1.3;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--vp-c-text-1);
-}
-
-.note-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 13px;
-  color: var(--vp-c-text-3);
-}
-
-.sep {
-  color: var(--vp-c-divider);
-}
-
-.tags {
-  display: inline-flex;
-  gap: 0.5rem;
-}
-
-.tag {
-  color: var(--vp-c-text-2);
-}
-
-.badge {
-  margin-left: 0.25rem;
-  padding: 0.1rem 0.4rem;
-  border: 1px solid var(--vp-c-warning-1);
-  border-radius: 4px;
-  color: var(--vp-c-warning-1);
-  font-size: 12px;
-  line-height: 1.5;
-}
-</style>

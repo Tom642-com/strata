@@ -11,8 +11,7 @@ import { toISODate } from './date';
  * 侧边栏本身由构建时扫描目录生成，不需要手工维护笔记列表。
  */
 const TOPIC_LABELS: Record<string, string> = {
-  'web-architecture': '前端与架构',
-  tooling: '工具链',
+  embedded: '嵌入式',
 };
 
 const configDir = path.dirname(fileURLToPath(import.meta.url));
@@ -178,6 +177,12 @@ export default withMermaid(
     head: [
       ['link', { rel: 'alternate', type: 'application/rss+xml', title: '学习笔记', href: `${base}rss.xml` }],
       ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }],
+      // 正文字号偏好：在首屏渲染前应用，避免刷新时字号闪动
+      [
+        'script',
+        {},
+        `try{var v=localStorage.getItem('strata:read-size');if(v==='sm'||v==='md'||v==='lg'){document.documentElement.dataset.readSize=v}}catch(e){}`,
+      ],
     ],
     async buildEnd(siteConfig) {
       await writeRss(siteConfig.outDir);

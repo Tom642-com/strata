@@ -1,0 +1,417 @@
+/* ==========================================================================
+   04 · 组件样式（Components）
+   --------------------------------------------------------------------------
+   按「组件」组织，每个组件一个区块，区块内不再出现裸数值。
+   命名规则：
+     · 自有组件使用具名类：.note-head / .entry-list / .tag-chip / .group-title
+     · 覆盖 VitePress 组件时直接写其类名（.VPHero / .VPFeature / .vp-doc table）
+   新增组件顺序：先在此文件加区块，再在 Vue 组件里使用类名，禁止在 .vue 里写样式。
+   ========================================================================== */
+
+/* ---- 笔记头部（NoteMeta.vue） ------------------------------------------ */
+.note-head {
+  margin-bottom: var(--ds-space-6);
+}
+
+.note-title {
+  margin: 0 0 var(--ds-space-3);
+  font-size: var(--ds-fs-h1);
+  line-height: var(--ds-lh-h1);
+  letter-spacing: var(--ds-ls-h1);
+  font-weight: var(--ds-fw-semibold);
+  color: var(--ds-text-1);
+  text-wrap: balance;
+}
+
+.note-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-space-2);
+  font-size: var(--ds-fs-xs);
+  letter-spacing: var(--ds-ls-meta);
+  color: var(--ds-text-3);
+}
+
+.note-meta .sep {
+  color: var(--ds-border);
+}
+
+.note-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-2);
+}
+
+.note-tag {
+  color: var(--ds-text-2);
+}
+
+/* ---- 正文字号控件（NoteMeta.vue） -------------------------------------- */
+.note-size {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  padding: 2px;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-surface-soft);
+}
+
+.note-size__btn {
+  min-width: 30px;
+  height: 22px;
+  padding: 0 var(--ds-space-2);
+  border: 0;
+  border-radius: var(--ds-radius-full);
+  background: transparent;
+  color: var(--ds-text-3);
+  font-size: var(--ds-fs-xs);
+  line-height: 22px;
+  cursor: pointer;
+  transition:
+    background-color var(--ds-dur) var(--ds-ease),
+    color var(--ds-dur) var(--ds-ease);
+}
+
+.note-size__btn:hover {
+  color: var(--ds-text-1);
+}
+
+.note-size__btn.is-active {
+  background: var(--ds-surface);
+  color: var(--ds-text-1);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+/* ---- 笔记条目列表（NoteIndex.vue / TagFilter.vue 共用） ------------------ */
+.vp-doc .entry-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vp-doc .entry-item {
+  margin: 0;
+  padding: var(--ds-space-3) 0;
+  border-bottom: 1px solid var(--ds-border);
+}
+
+.vp-doc .entry-item:last-child {
+  border-bottom: none;
+}
+
+.vp-doc .entry-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ds-space-3);
+}
+
+.vp-doc .entry-date {
+  flex: none;
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-fs-xs);
+  color: var(--ds-text-3);
+}
+
+.vp-doc .entry-name {
+  font-size: var(--ds-fs-body);
+  font-weight: var(--ds-fw-medium);
+  color: var(--ds-text-1);
+  text-decoration: none;
+  transition: color var(--ds-dur) var(--ds-ease);
+}
+
+.vp-doc .entry-name:hover {
+  color: var(--ds-brand);
+  text-decoration: none;
+}
+
+.vp-doc .entry-summary {
+  margin: var(--ds-space-1) 0 0;
+  font-size: var(--ds-fs-sm);
+  line-height: var(--ds-lh-sm);
+  color: var(--ds-text-2);
+}
+
+/* ---- 分组标题（NoteIndex.vue） ----------------------------------------- */
+/* 注意：不能用 .group，VitePress 侧边栏自己也用这个类名 */
+.vp-doc .note-group {
+  margin-bottom: var(--ds-space-7);
+}
+
+.vp-doc .note-group__title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ds-space-2);
+  margin: var(--ds-space-6) 0 var(--ds-space-2);
+  padding-bottom: var(--ds-space-2);
+  border-top: none;
+  border-bottom: 1px solid var(--ds-border);
+  font-size: var(--ds-fs-h3);
+  font-weight: var(--ds-fw-semibold);
+  color: var(--ds-text-1);
+}
+
+.vp-doc .note-group__count {
+  font-size: var(--ds-fs-xs);
+  font-weight: var(--ds-fw-regular);
+  color: var(--ds-text-3);
+}
+
+/* ---- 标签云（TagFilter.vue） ------------------------------------------- */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-2);
+  margin: var(--ds-space-5) 0 var(--ds-space-4);
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+  padding: 0.28rem 0.65rem;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-full);
+  background: transparent;
+  font-size: var(--ds-fs-xs);
+  color: var(--ds-text-2);
+  cursor: pointer;
+  transition:
+    border-color var(--ds-dur) var(--ds-ease),
+    color var(--ds-dur) var(--ds-ease),
+    background-color var(--ds-dur) var(--ds-ease);
+}
+
+.tag-chip:hover {
+  border-color: var(--ds-brand);
+  color: var(--ds-brand);
+}
+
+.tag-chip.is-active {
+  border-color: var(--ds-brand);
+  background: var(--ds-brand-soft);
+  color: var(--ds-brand);
+}
+
+.tag-chip__count {
+  font-size: 0.6875rem;
+  color: var(--ds-text-3);
+}
+
+.tag-cloud__hint {
+  margin: 0 0 var(--ds-space-4);
+  font-size: var(--ds-fs-xs);
+  color: var(--ds-text-3);
+}
+
+/* ---- 首页 Hero --------------------------------------------------------- */
+/* 首页主标题不用渐变：文档站保持克制，品牌色留给链接和卡片描边 */
+/* .name 与 .clip 是同一个元素上的两个类，
+   .clip 用 -webkit-text-fill-color 上色，必须一并覆盖，否则颜色不变 */
+#app .VPHero .name {
+  color: var(--ds-text-1);
+  -webkit-text-fill-color: var(--ds-text-1);
+  font-size: var(--ds-fs-display);
+  line-height: var(--ds-lh-display);
+  letter-spacing: var(--ds-ls-display);
+  font-weight: var(--ds-fw-semibold);
+}
+
+#app .VPHero .text {
+  font-size: var(--ds-fs-h2);
+  line-height: var(--ds-lh-h2);
+  letter-spacing: var(--ds-ls-h2);
+  color: var(--ds-text-1);
+}
+
+#app .VPHero .tagline {
+  max-width: 32em;
+  font-size: var(--ds-fs-body);
+  line-height: var(--ds-lh-body);
+  color: var(--ds-text-3);
+}
+
+#app .VPHero .actions .VPButton {
+  border-radius: var(--ds-radius-md);
+  font-weight: var(--ds-fw-medium);
+}
+
+/* ---- 首页特性卡片（VPFeature） ----------------------------------------- */
+#app .VPFeature {
+  transition:
+    border-color var(--ds-dur) var(--ds-ease),
+    box-shadow var(--ds-dur) var(--ds-ease),
+    transform var(--ds-dur) var(--ds-ease);
+}
+
+#app .VPFeature .box {
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+#app .VPFeature:hover .box {
+  border-color: color-mix(in srgb, var(--ds-brand) 40%, var(--ds-border));
+  box-shadow: var(--ds-shadow-md);
+  transform: translateY(-2px);
+}
+
+#app .VPFeature .title {
+  font-size: var(--ds-fs-h4);
+  font-weight: var(--ds-fw-semibold);
+  color: var(--ds-text-1);
+}
+
+#app .VPFeature .details {
+  font-size: var(--ds-fs-sm);
+  line-height: var(--ds-lh-sm);
+  color: var(--ds-text-2);
+}
+
+/* ---- 表格 -------------------------------------------------------------- */
+.vp-doc table {
+  margin: var(--ds-space-4) 0;
+  font-size: var(--ds-fs-sm);
+}
+
+.vp-doc th,
+.vp-doc td {
+  padding: 0.6em 0.9em;
+  border: 1px solid var(--ds-border);
+}
+
+.vp-doc th {
+  background: var(--ds-surface-soft);
+  font-weight: var(--ds-fw-semibold);
+  color: var(--ds-text-1);
+}
+
+.vp-doc tr {
+  border-top: none;
+  background: transparent;
+}
+
+.vp-doc tr:nth-child(2n) {
+  background: color-mix(in srgb, var(--ds-surface-soft) 55%, transparent);
+}
+
+/* ---- 代码 -------------------------------------------------------------- */
+.vp-doc :not(pre) > code {
+  padding: 0.15em 0.4em;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-soft);
+  font-size: var(--ds-fs-code);
+  color: var(--ds-text-1);
+}
+
+.vp-doc div[class*='language-'] {
+  margin: var(--ds-space-4) 0;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-md);
+  overflow: hidden;
+}
+
+.vp-doc div[class*='language-'] pre {
+  padding-top: var(--ds-space-4);
+}
+
+.vp-doc [class*='language-'] code {
+  font-size: var(--ds-fs-code-block);
+  line-height: 1.7;
+}
+
+/* ---- 引用块 ------------------------------------------------------------ */
+.vp-doc blockquote {
+  margin: var(--ds-space-4) 0;
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border-left: 3px solid var(--ds-brand);
+  border-radius: 0 var(--ds-radius-sm) var(--ds-radius-sm) 0;
+  background: var(--ds-surface-soft);
+  color: var(--ds-text-2);
+}
+
+.vp-doc blockquote > p {
+  margin: var(--ds-space-2) 0;
+  font-size: calc(var(--ds-fs-body) * var(--ds-read-scale));
+}
+
+/* ---- 提示块（::: tip / warning 等） ------------------------------------ */
+.vp-doc .custom-block {
+  border-radius: var(--ds-radius-md);
+  font-size: var(--ds-fs-sm);
+}
+
+.vp-doc .custom-block p {
+  font-size: var(--ds-fs-sm);
+  line-height: var(--ds-lh-sm);
+}
+
+.custom-block-title {
+  font-size: var(--ds-fs-sm);
+  font-weight: var(--ds-fw-semibold);
+}
+
+/* ---- 404 页（NotFound.vue） -------------------------------------------- */
+/* 默认 .quote 限宽 256px，中文会剩一个字单独成行 */
+#app .NotFound .code {
+  font-size: var(--ds-fs-display);
+  line-height: 1.1;
+  letter-spacing: var(--ds-ls-display);
+  color: var(--ds-text-1);
+}
+
+#app .NotFound .title {
+  padding-top: var(--ds-space-3);
+  font-size: var(--ds-fs-h3);
+  line-height: var(--ds-lh-h3);
+  letter-spacing: 0;
+  color: var(--ds-text-1);
+}
+
+#app .NotFound .divider {
+  margin: var(--ds-space-5) auto var(--ds-space-4);
+  width: 64px;
+  background-color: var(--ds-border);
+}
+
+#app .NotFound .quote {
+  max-width: 32em;
+  font-size: var(--ds-fs-sm);
+  line-height: var(--ds-lh-sm);
+  color: var(--ds-text-3);
+}
+
+#app .NotFound .link {
+  border-radius: var(--ds-radius-full);
+  padding: var(--ds-space-1) var(--ds-space-4);
+  border-color: var(--ds-brand);
+  font-size: var(--ds-fs-sm);
+}
+
+/* ---- Mermaid 图 -------------------------------------------------------- */
+.vp-doc .mermaid {
+  display: flex;
+  justify-content: center;
+  margin: var(--ds-space-5) 0;
+  overflow-x: auto;
+  background: transparent;
+}
+
+/* ---- 侧边栏条目 -------------------------------------------------------- */
+/* 中文长标题在侧边栏里换行更自然 */
+#app .VPSidebarItem .text {
+  line-height: 1.55;
+}
+
+/* ---- 右侧目录 ---------------------------------------------------------- */
+/* 单行显示，超出用省略号；完整标题由链接自带的 title 属性在悬停时展示 */
+#app .VPDocAsideOutline .outline-link {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+}

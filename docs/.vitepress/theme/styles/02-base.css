@@ -1,0 +1,149 @@
+/* ==========================================================================
+   02 · 基础样式（Base）
+   --------------------------------------------------------------------------
+   只放「元素级」样式：html / body / 标题 / 段落 / 链接 / 列表 / 分隔线等。
+   不放任何组件样式，也不写具体页面的特例。
+   ========================================================================== */
+
+/* 常驻纵向滚动条：打开搜索框会锁定 body 滚动，滚动条消失会让视口变宽、页面抖动。
+   强制常驻后宽度恒定。 */
+html {
+  overflow-y: scroll;
+}
+
+body {
+  font-family: var(--ds-font-sans);
+  font-size: var(--ds-fs-body);
+  line-height: var(--ds-lh-body);
+  letter-spacing: var(--ds-ls-body);
+  color: var(--ds-text-2);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--ds-brand-soft);
+  color: var(--ds-text-1);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ds-brand);
+  outline-offset: 2px;
+  border-radius: var(--ds-radius-sm);
+}
+
+/* ---- 标题 -------------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--ds-text-1);
+  font-weight: var(--ds-fw-semibold);
+  text-wrap: balance;
+}
+
+/* ---- 链接 -------------------------------------------------------------- */
+a {
+  color: var(--ds-brand);
+  text-decoration-color: transparent;
+  text-underline-offset: 0.2em;
+  transition: color var(--ds-dur) var(--ds-ease);
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ---- 分隔线 ------------------------------------------------------------ */
+hr {
+  height: 0;
+  margin: var(--ds-space-7) 0;
+  border: 0;
+  border-top: 1px solid var(--ds-border);
+}
+
+/* ---- 图片 -------------------------------------------------------------- */
+img {
+  border-radius: var(--ds-radius-md);
+}
+
+/* ==========================================================================
+   正文排版（.vp-doc）
+   --------------------------------------------------------------------------
+   笔记正文、独立页面正文共用同一套排版。修改正文字号/间距只需改这里。
+   ========================================================================== */
+
+.vp-doc {
+  font-size: calc(var(--ds-fs-body) * var(--ds-read-scale));
+  line-height: var(--ds-lh-body);
+  letter-spacing: var(--ds-ls-body);
+  color: var(--ds-text-2);
+}
+
+.vp-doc h1 {
+  margin: 0 0 var(--ds-space-5);
+  font-size: calc(var(--ds-fs-h1) * var(--ds-read-scale));
+  line-height: var(--ds-lh-h1);
+  letter-spacing: var(--ds-ls-h1);
+  border-top: none;
+  padding-top: 0;
+}
+
+/* 笔记页的一级标题由 NoteMeta 渲染，正文从 h2 开始 */
+.vp-doc h2 {
+  margin: var(--ds-space-8) 0 var(--ds-space-4);
+  padding-top: 0;
+  font-size: calc(var(--ds-fs-h2) * var(--ds-read-scale));
+  line-height: var(--ds-lh-h2);
+  letter-spacing: var(--ds-ls-h2);
+  border-top: none;
+}
+
+.vp-doc h3 {
+  margin: var(--ds-space-6) 0 var(--ds-space-3);
+  font-size: calc(var(--ds-fs-h3) * var(--ds-read-scale));
+  line-height: var(--ds-lh-h3);
+}
+
+.vp-doc h4 {
+  margin: var(--ds-space-5) 0 var(--ds-space-2);
+  font-size: calc(var(--ds-fs-h4) * var(--ds-read-scale));
+  line-height: var(--ds-lh-h3);
+}
+
+.vp-doc p,
+.vp-doc li {
+  font-size: calc(var(--ds-fs-body) * var(--ds-read-scale));
+  line-height: var(--ds-lh-body);
+}
+
+.vp-doc p {
+  margin: var(--ds-space-4) 0;
+}
+
+.vp-doc ul,
+.vp-doc ol {
+  margin: var(--ds-space-3) 0;
+  padding-left: 1.4em;
+}
+
+.vp-doc li + li {
+  margin-top: var(--ds-space-2);
+}
+
+.vp-doc strong {
+  color: var(--ds-text-1);
+  font-weight: var(--ds-fw-semibold);
+}
+
+.vp-doc a {
+  font-weight: var(--ds-fw-medium);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--ds-brand) 35%, transparent);
+}
+
+.vp-doc a:hover {
+  text-decoration-color: var(--ds-brand);
+}

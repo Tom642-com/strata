@@ -1,0 +1,144 @@
+/* ==========================================================================
+   03 · 布局骨架（Layout）
+   --------------------------------------------------------------------------
+   页头、侧边栏、内容列、右侧目录的位置与尺寸。
+   这里只处理「区域之间的关系」，具体文字排版在 04-components.css。
+
+   注意：VitePress 组件自带 scoped 样式（.VPNav[data-v-xxx]），
+   单类选择器权重不够，结构覆盖必须用 #app 前缀。
+   ========================================================================== */
+
+/* ---- 页头：全尺寸固定、通栏 -------------------------------------------- */
+#app .VPNav {
+  position: fixed;
+  top: var(--vp-layout-top-height, 0px);
+  left: 0;
+  width: 100%;
+  height: var(--vp-nav-height);
+  background-color: var(--ds-surface);
+  z-index: calc(var(--vp-z-index-sidebar) + 10);
+}
+
+/* 默认主题的 .divider 在带侧边栏时会从 272px 处才开始绘制，
+   且颜色为 --vp-c-gutter（深色下是纯黑），与侧边栏分隔线不是同一条。
+   这里关掉它，改由 .VPNav::after 画一条通栏线。 */
+#app .VPNavBar .divider {
+  display: none;
+}
+
+#app .VPNavBar {
+  background-color: transparent;
+}
+
+#app .VPNav::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  height: 1px;
+  background-color: var(--ds-border);
+}
+
+/* 页头脱离文档流后，内容区补上等高间距 */
+#app .VPContent {
+  padding-top: var(--vp-nav-height);
+}
+
+/* ---- 侧边栏：从页头下方开始 -------------------------------------------- */
+/* 只靠 padding-top 让位是不够的：盒子的背景与右边框仍会从屏幕顶端延伸，
+   深色主题下会看到一条竖线把页头切开。所以直接下移盒子本身。 */
+#app .VPSidebar {
+  top: var(--vp-nav-height);
+  padding: var(--ds-space-1) var(--ds-space-5) var(--ds-space-8);
+  border-right: 1px solid var(--ds-border);
+  background-color: var(--ds-surface-alt);
+}
+
+/* 顶部遮挡层原本用于盖住滚到页头下方的内容；侧边栏已在页头下方，
+   它的负外边距反而会把第一项顶出可视区，直接去掉 */
+#app .VPSidebar .curtain {
+  display: none;
+}
+
+#app .VPSidebar .group {
+  width: 100%;
+}
+
+/* 移动端「本页目录」条与遮罩都从页头下沿开始 */
+#app .VPLocalNav {
+  top: var(--vp-nav-height);
+}
+
+#app .VPBackdrop {
+  top: var(--vp-nav-height);
+}
+
+/* ---- 内容列宽 ---------------------------------------------------------- */
+/* 所有文档页共用同一列宽：笔记、列表、归档、标签、404 都是 800px */
+#app .VPDoc .content-container {
+  max-width: var(--ds-content-width);
+}
+
+/* 无侧边栏的页面（归档/标签/404）默认被 .content 的 720px 卡住，
+   这里放开到「列宽 + 两侧内边距」，保证与其他页面等宽 */
+#app .VPDoc:not(.has-sidebar) .content {
+  max-width: calc(var(--ds-content-width) + var(--ds-space-6) * 2);
+}
+
+/* ------------------------------------------------------------------
+   正文列的横向定位（全站统一）
+
+   目标：所有文档页的正文列都从「侧边栏宽度 + 32px」处开始，宽度 800px，
+   右边留白自适应。默认主题按页面结构分别居中，导致左边缘在页面之间跳动
+   （实测 285 / 413 / 313），因此改为左对齐。
+   ------------------------------------------------------------------ */
+@media (min-width: 960px) {
+  #app .VPDoc {
+    padding-left: var(--ds-space-6);
+  }
+}
+
+/* 无侧边栏的页面（归档/标签/404）没有那 240px 占位，这里补上同样的左边距 */
+@media (min-width: 960px) {
+  #app .VPContent:not(.has-sidebar) .VPDoc {
+    /* 240 + 8：补偿无侧边栏页面缺少的那一层 24px 内边距，使正文左边缘与笔记页对齐 */
+    padding-left: calc(var(--ds-sidebar-width) + var(--ds-space-2));
+  }
+}
+
+@media (min-width: 960px) {
+  #app .VPDoc .container {
+    justify-content: flex-start;
+  }
+}
+
+@media (min-width: 960px) {
+  #app .VPDoc .content {
+    margin: 0;
+  }
+}
+
+/* 居中的真正来源是 .content-container 的 margin: 0 auto */
+@media (min-width: 960px) {
+  #app .VPDoc .content-container {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* 超宽屏时主题会按 (100vw - 1440)/2 补居中留白，右侧最多可达 240px。
+   这里固定为常规留白，避免右侧出现大片空白。 */
+@media (min-width: 1440px) {
+  #app .VPContent.has-sidebar {
+    padding-right: var(--ds-space-6);
+  }
+}
+
+/* ---- 搜索框靠右（桌面端） ---------------------------------------------- */
+@media (min-width: 960px) {
+  #app .VPNavBarSearch {
+    justify-content: flex-end;
+  }
+}

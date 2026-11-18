@@ -1,0 +1,120 @@
+/* ==========================================================================
+   01 · 设计令牌（Design Tokens）
+   --------------------------------------------------------------------------
+   全站所有颜色、字号、间距、圆角、阴影、布局宽度的唯一来源。
+   规则：任何样式文件里都不允许出现裸数值（如 #185fa5、16px、0.5rem），
+   必须引用本文件的令牌。新增视觉需求 → 先在这里加令牌，再去消费。
+   ========================================================================== */
+
+:root {
+  /* ---- 品牌色 ---------------------------------------------------------- */
+  --vp-c-brand-1: #185fa5;
+  --vp-c-brand-2: #1a6dbb;
+  --vp-c-brand-3: #2b7fc9;
+  --vp-c-brand-soft: rgba(24, 95, 165, 0.12);
+
+  /* ---- 字体族 ---------------------------------------------------------- */
+  --ds-font-sans:
+    'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', ui-sans-serif, system-ui, -apple-system,
+    sans-serif;
+  --ds-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* ---- 字号阶梯（rem：根字号 16px） ------------------------------------ */
+  --ds-fs-display: 2.5rem; /* 40 · 首页主标题 */
+  --ds-fs-h1: 2.125rem; /* 34 · 页面一级标题 */
+  --ds-fs-h2: 1.5625rem; /* 25 · 章节标题（笔记正文起点） */
+  --ds-fs-h3: 1.1875rem; /* 19 · 小节标题 */
+  --ds-fs-h4: 1.03125rem; /* 16.5 · 四级标题 */
+  --ds-fs-body: 1rem; /* 16 · 正文基准 */
+  --ds-fs-sm: 0.875rem; /* 14 · 表格、次要文本 */
+  --ds-fs-xs: 0.8125rem; /* 13 · 元信息、标签 */
+  --ds-fs-code: 0.9em; /* 行内代码，相对正文 */
+  --ds-fs-code-block: 0.84375rem; /* 13.5 · 代码块 */
+
+  /* ---- 行高 ------------------------------------------------------------ */
+  --ds-lh-display: 1.15;
+  --ds-lh-h1: 1.25;
+  --ds-lh-h2: 1.35;
+  --ds-lh-h3: 1.45;
+  --ds-lh-body: 1.75;
+  --ds-lh-sm: 1.6;
+
+  /* ---- 字间距 ---------------------------------------------------------- */
+  --ds-ls-display: -0.02em;
+  --ds-ls-h1: -0.015em;
+  --ds-ls-h2: -0.01em;
+  --ds-ls-body: 0.01em; /* 中文正文轻微加宽，避免字挤在一起 */
+  --ds-ls-meta: 0.02em;
+
+  /* ---- 字重 ------------------------------------------------------------ */
+  --ds-fw-regular: 400;
+  --ds-fw-medium: 500;
+  --ds-fw-semibold: 600;
+
+  /* ---- 间距（4 的倍数） ------------------------------------------------- */
+  --ds-space-1: 0.25rem; /* 4 */
+  --ds-space-2: 0.5rem; /* 8 */
+  --ds-space-3: 0.75rem; /* 12 */
+  --ds-space-4: 1rem; /* 16 */
+  --ds-space-5: 1.5rem; /* 24 */
+  --ds-space-6: 2rem; /* 32 */
+  --ds-space-7: 2.5rem; /* 40 */
+  --ds-space-8: 3rem; /* 48 */
+  --ds-space-9: 3.5rem; /* 56 */
+  --ds-space-10: 4.5rem; /* 72 */
+
+  /* ---- 圆角 ------------------------------------------------------------ */
+  --ds-radius-sm: 6px;
+  --ds-radius-md: 10px;
+  --ds-radius-lg: 14px;
+  --ds-radius-full: 999px;
+
+  /* ---- 颜色层级（语义化，全部映射到主题变量，自动适配深色） ------------- */
+  --ds-text-1: var(--vp-c-text-1); /* 标题、强调正文 */
+  --ds-text-2: var(--vp-c-text-2); /* 一般正文、列表 */
+  --ds-text-3: var(--vp-c-text-3); /* 元信息、辅助说明 */
+  --ds-border: var(--vp-c-divider); /* 常规分隔线 */
+  --ds-border-strong: var(--vp-c-border); /* 容器边框 */
+  --ds-surface: var(--vp-c-bg); /* 页面底 */
+  --ds-surface-alt: var(--vp-c-bg-alt); /* 侧边栏、代码块底 */
+  --ds-surface-soft: var(--vp-c-bg-soft); /* 卡片、提示块底 */
+  --ds-brand: var(--vp-c-brand-1);
+  --ds-brand-soft: var(--vp-c-brand-soft);
+
+  /* ---- 阴影（浅色下给容器一点浮起感，深色下几乎不可见） ----------------- */
+  --ds-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04);
+  --ds-shadow-md: 0 4px 16px rgba(16, 24, 40, 0.06);
+
+  /* ---- 布局尺寸 -------------------------------------------------------- */
+  --ds-sidebar-width: 240px;
+  --ds-content-width: 800px; /* 所有文档页统一的正文列宽 */
+  --ds-aside-width: 256px; /* 右侧目录列 */
+
+  /* ---- 阅读字号档位（由正文控件写入 html[data-read-size]） --------------- */
+  --ds-read-scale: 1;
+
+  /* ---- 动效 ------------------------------------------------------------ */
+  --ds-dur: 180ms;
+  --ds-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---- 覆盖 VitePress 变量，让主题自身组件跟随设计系统 ------------------ */
+  --vp-font-family-base: var(--ds-font-sans);
+  --vp-font-family-mono: var(--ds-font-mono);
+  --vp-sidebar-width: var(--ds-sidebar-width);
+  --vp-sidebar-bg-color: var(--ds-surface-alt);
+}
+
+/* 正文三档字号：小 / 中 / 大，只缩放正文，不影响导航与侧边栏 */
+html[data-read-size='sm'] {
+  --ds-read-scale: 0.94; /* 16 → 15 */
+}
+
+html[data-read-size='lg'] {
+  --ds-read-scale: 1.13; /* 16 → 18 */
+}
+
+/* 深色模式下需要单独定义的自定义色（其余颜色通过 var(--vp-c-*) 自动切换） */
+html.dark {
+  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --ds-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
