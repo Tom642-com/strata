@@ -16,7 +16,6 @@
     --ds-fs-h2: 1.4375rem; /* 23 */
     --ds-fs-h3: 1.125rem; /* 18 */
     --ds-space-8: 2.5rem; /* 48 → 40 */
-    --ds-space-9: 2.75rem; /* 56 → 44 */
   }
 
   .VPHero .tagline {
@@ -36,8 +35,6 @@
     --ds-space-6: 1.75rem;
     --ds-space-7: 2rem;
     --ds-space-8: 2.25rem;
-    --ds-space-9: 2.5rem;
-    --ds-space-10: 3rem;
   }
 
   body {

@@ -60,8 +60,6 @@
   --ds-space-6: 2rem; /* 32 */
   --ds-space-7: 2.5rem; /* 40 */
   --ds-space-8: 3rem; /* 48 */
-  --ds-space-9: 3.5rem; /* 56 */
-  --ds-space-10: 4.5rem; /* 72 */
 
   /* ---- 圆角 ------------------------------------------------------------ */
   --ds-radius-sm: 6px;
@@ -74,7 +72,6 @@
   --ds-text-2: var(--vp-c-text-2); /* 一般正文、列表 */
   --ds-text-3: var(--vp-c-text-3); /* 元信息、辅助说明 */
   --ds-border: var(--vp-c-divider); /* 常规分隔线 */
-  --ds-border-strong: var(--vp-c-border); /* 容器边框 */
   --ds-surface: var(--vp-c-bg); /* 页面底 */
   --ds-surface-alt: var(--vp-c-bg-alt); /* 侧边栏、代码块底 */
   --ds-surface-soft: var(--vp-c-bg-soft); /* 卡片、提示块底 */
@@ -88,7 +85,6 @@
   /* ---- 布局尺寸 -------------------------------------------------------- */
   --ds-sidebar-width: 240px;
   --ds-content-width: 800px; /* 所有文档页统一的正文列宽 */
-  --ds-aside-width: 256px; /* 右侧目录列 */
 
   /* ---- 阅读字号档位（由正文控件写入 html[data-read-size]） --------------- */
   --ds-read-scale: 1;
