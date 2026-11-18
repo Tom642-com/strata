@@ -13,7 +13,7 @@
 | 层 | 技术 | 版本约束 |
 | --- | --- | --- |
 | 框架 | VitePress | 1.6.x，默认主题 |
-| 样式 | 默认主题 + CSS 变量 | 定制写在 `docs/.vitepress/theme/custom.css` |
+| 样式 | 默认主题 + 设计令牌 | 定制写在 `docs/.vitepress/theme/styles/`，规范见 `DESIGN.md` |
 | 图表 | vitepress-plugin-mermaid | 配套 **mermaid 11**，不能升到 12 |
 | 公式 | markdown-it-mathjax3 | 4.x，构建时渲染为内联 SVG |
 | 搜索 | VitePress 本地搜索 | 自定义 `Intl.Segmenter` 中文分词 |
@@ -21,13 +21,15 @@
 
 ### 硬性禁止
 
-1. **禁止引入 Tailwind 或其他 CSS 框架**。默认主题已经覆盖导航、侧边栏、正文排版；叠加工具类会与主题的预检样式冲突。需要改视觉时，改 `custom.css` 里的 `--vp-*` 变量。
+1. **禁止引入 Tailwind 或其他 CSS 框架**。默认主题已经覆盖导航、侧边栏、正文排版；叠加工具类会与主题的预检样式冲突。需要改视觉时，改 `styles/01-tokens.css` 里的令牌。
 2. **禁止把 mermaid 升到 12**。`vitepress-plugin-mermaid` 的 peer 依赖是 `10 || 11`，升级会导致构建期的依赖冲突。
 3. **禁止在内容中使用相对链接**（如 `../xxx.md`）。VitePress 的相对链接按文件位置解析，移动文件就会断。统一用站内绝对路径：
    `/notes/<topic>/<slug>.md`（构建时自动转成 `.html` 并补上 base）。
 4. **禁止在 `config.mts` 中写死域名或 base**。两者由 CI 通过 `SITE_URL` / `BASE_PATH` 注入。
 5. **禁止在 `docs/notes/` 下放草稿**。未完成的笔记放 `docs/notes/_drafts/`，该目录被 `srcExclude` 排除，不会构建、不会被搜索索引。
 6. **禁止删除或改写 `check-content.mjs` 的校验规则来「让构建通过」**。校验失败说明内容有问题，应改内容。
+7. **禁止在 `.vue` 组件里写 `<style>`，禁止在样式文件里写裸数值**。所有视觉规则见 `DESIGN.md`：
+   颜色/字号/间距只能来自 `theme/styles/01-tokens.css` 的令牌，组件类名统一登记在 `DESIGN.md` 第 6 节。
 
 ## 目录结构
 
@@ -36,8 +38,9 @@ docs/
 ├── .vitepress/
 │   ├── config.mts          # 站点配置、侧边栏生成、中文分词
 │   ├── notes.data.ts       # 笔记数据源（列表/归档/标签共用）
-│   ├── theme/              # 主题扩展：Layout、NoteMeta、custom.css
-│   └── components/         # NoteIndex、TagFilter
+│   ├── theme/              # 主题扩展：Layout、NoteMeta、index.ts
+│   │   └── styles/         # 设计系统 5 层：令牌/基础/骨架/组件/响应式
+│   └── components/         # NoteIndex、TagFilter（只含模板与逻辑，无样式）
 ├── notes/<topic>/<date>-<slug>.md   # 笔记正文，唯一的内容来源
 ├── notes/index.md          # 全部笔记（按主题分组）
 ├── archive.md              # 按年份归档
@@ -63,7 +66,6 @@ docs/
 | `topic` | string | 是 | 必须与所在目录名一致 |
 | `tags` | string[] | 否 | 复用已有标签，全站控制在 50 个以内 |
 | `summary` | string | 是 | 20–200 字，显示在列表页 |
-| `verified` | boolean | 否 | `false` 时页面显示「待核实」标记 |
 
 ### 正文结构（固定四段）
 
@@ -126,6 +128,26 @@ npm run build    # 构建；死链、语法错误都会让构建失败
 ```
 
 两条都通过才算完成。**构建失败时不要删除内容或关闭检查来「修复」，应先读报错定位。**
+
+## 交付流程（改完必须给出本地链接）
+
+改完任何东西，都要在回复里给出**可点击的本地地址**，供人工审核后再提交：
+
+1. 先确认开发服务器在运行（`npm run dev -- --host 127.0.0.1`，默认 `http://127.0.0.1:5173/`）；没运行就启动，并把端口告诉人类。
+2. 给出**受影响的具体页面 URL**，例如 `http://127.0.0.1:5173/notes/embedded/2026-11-18-embedded-roadmap.html`，不要只说「刷新看看」。
+3. 改动涉及多个页面时，逐条列出对应的链接。
+4. 人类确认之后才 `git commit` / `git push`，不要自行推送。
+
+## 视觉规范
+
+视觉与排版的完整规范见 **[DESIGN.md](./DESIGN.md)**，包含令牌表、组件类名表、命名规则、已知陷阱与验收清单。
+改动任何样式前必须先读该文件；新增组件或令牌后同步更新它。样式文件分层固定在：
+
+```
+theme/styles/01-tokens.css  →  02-base.css  →  03-layout.css  →  04-components.css  →  05-responsive.css
+```
+
+顺序即层叠顺序，不可调整；新增样式必须归入对应层，不允许新建游离文件。
 
 ## 提交规范
 

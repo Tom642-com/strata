@@ -20,7 +20,6 @@ const schema = z.object({
     .string()
     .min(20, '至少 20 字，列表页需要它')
     .max(200, '不超过 200 字'),
-  verified: z.boolean().default(false),
 });
 
 const toISODate = (value) =>

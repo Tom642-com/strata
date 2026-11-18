@@ -2,6 +2,8 @@
 title: 归档
 sidebar: false
 aside: false
+prev: false
+next: false
 ---
 
 <script setup>

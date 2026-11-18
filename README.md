@@ -19,10 +19,10 @@ npm run dev          # 打开 http://localhost:5173
 **方式一：命令行创建骨架（推荐）**
 
 ```bash
-npm run new -- --topic web-architecture --slug http-cache --title "HTTP 缓存的分层策略"
+npm run new -- --topic embedded --slug http-cache --title "HTTP 缓存的分层策略"
 ```
 
-会在 `docs/notes/web-architecture/` 下生成 `2026-11-18-http-cache.md`，并自动出现在侧边栏。
+会在 `docs/notes/embedded/` 下生成 `2026-11-18-http-cache.md`，并自动出现在侧边栏。
 
 **方式二：直接新建文件**
 
@@ -36,7 +36,6 @@ npm run new -- --topic web-architecture --slug http-cache --title "HTTP 缓存�
 | `topic` | 主题，必须与所在目录名一致 |
 | `tags` | 标签数组，用于跨主题筛选 |
 | `summary` | 20–200 字摘要，显示在列表页 |
-| `verified` | `false` 时页面显示「待核实」 |
 
 **正文结构固定四段**：结论 → 推导 → 易错点 → 关联，且不要写一级标题（H1 由模板生成）。
 完整规范见 [AGENTS.md](./AGENTS.md)，那份文件同时是给 AI 助手看的约束。

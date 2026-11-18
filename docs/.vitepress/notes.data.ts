@@ -8,7 +8,6 @@ export interface NoteItem {
   topic: string;
   tags: string[];
   summary: string;
-  verified: boolean;
 }
 
 declare const data: NoteItem[];
@@ -31,7 +30,6 @@ export default createContentLoader('notes/**/*.md', {
         topic: String(frontmatter.topic ?? ''),
         tags: Array.isArray(frontmatter.tags) ? frontmatter.tags.map(String) : [],
         summary: String(frontmatter.summary ?? ''),
-        verified: frontmatter.verified !== false,
       }))
       .filter((note) => note.title && note.date)
       .sort((a, b) => (a.date < b.date ? 1 : -1));

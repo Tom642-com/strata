@@ -8,7 +8,7 @@ const USAGE = `
   npm run new -- --topic <主题> --slug <英文短名> --title "<中文标题>" [--date YYYY-MM-DD]
 
 示例：
-  npm run new -- --topic web-architecture --slug http-cache --title "HTTP 缓存的分层策略"
+  npm run new -- --topic embedded --slug http-cache --title "HTTP 缓存的分层策略"
 `;
 
 const { values } = parseArgs({
@@ -49,7 +49,6 @@ date: ${date}
 topic: ${values.topic}
 tags: []
 summary:
-verified: false
 ---
 
 ## 结论

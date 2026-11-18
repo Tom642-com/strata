@@ -1,6 +1,8 @@
 ---
 title: 全部笔记
 aside: false
+prev: false
+next: false
 ---
 
 <script setup>
