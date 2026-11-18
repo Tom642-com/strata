@@ -1,0 +1,26 @@
+{
+  "name": "strata",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "npm run check:content && vitepress build docs",
+    "preview": "vitepress preview docs",
+    "check": "npm run check:content",
+    "check:content": "node scripts/check-content.mjs",
+    "format": "prettier --write .",
+    "new": "node scripts/new-note.mjs"
+  },
+  "dependencies": {
+    "markdown-it-mathjax3": "^4.3.2",
+    "mermaid": "^11.17.2",
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-mermaid": "^2.0.17"
+  },
+  "devDependencies": {
+    "gray-matter": "^4.0.3",
+    "prettier": "^3.10.1",
+    "zod": "^4.6.7"
+  }
+}

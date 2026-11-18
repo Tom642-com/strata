@@ -1,0 +1,29 @@
+:root {
+  --vp-c-brand-1: #185fa5;
+  --vp-c-brand-2: #1a6dbb;
+  --vp-c-brand-3: #2b7fc9;
+  --vp-c-brand-soft: rgba(24, 95, 165, 0.14);
+
+  --vp-font-family-base:
+    'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', ui-sans-serif, system-ui, sans-serif;
+  --vp-font-family-mono:
+    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* 中文长标题在侧边栏里换行更自然 */
+.VPSidebarItem .text {
+  line-height: 1.55;
+}
+
+/* 代码块圆角，浅色主题下也有一点边界感 */
+.vp-doc div[class*='language-'] {
+  border-radius: 8px;
+}
+
+/* 正文中的 Mermaid 图居中，过宽时横向滚动 */
+.vp-doc .mermaid {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  background: transparent;
+}
