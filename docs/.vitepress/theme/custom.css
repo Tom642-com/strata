@@ -1,11 +1,21 @@
+/* 常驻纵向滚动条。
+   打开搜索框时主题锁定 body 滚动，滚动条消失会让视口变宽（实测 985 → 1000），
+   居中的内容随之右移抖动。强制滚动条常驻后宽度恒定，
+   滚动条轨道本身就是那条用于占位的「白色条」。 */
+html {
+  overflow-y: scroll;
+}
+
 :root {
   --vp-c-brand-1: #185fa5;
   --vp-c-brand-2: #1a6dbb;
   --vp-c-brand-3: #2b7fc9;
   --vp-c-brand-soft: rgba(24, 95, 165, 0.14);
 
-  /* 侧边栏与内容区同底色，靠分隔线区分，更接近文档站常见形态 */
-  --vp-sidebar-bg-color: var(--vp-c-bg);
+  /* 侧边栏比默认 272px 窄一些 */
+  --vp-sidebar-width: 240px;
+  /* 侧边栏用略深的底色，与正文区分开 */
+  --vp-sidebar-bg-color: var(--vp-c-bg-alt);
 
   --vp-font-family-base:
     'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', ui-sans-serif, system-ui, sans-serif;
@@ -37,15 +47,55 @@
   z-index: calc(var(--vp-z-index-sidebar) + 10);
 }
 
+/* 页头底部分隔线：默认主题由内部的 .divider 绘制，带侧边栏时它被推后 272px，
+   颜色又是 --vp-c-gutter（暗色为纯黑），和侧边栏那条线不是同一条。
+   这里关掉它，改在层级最高的 .VPNav 上画一条通栏线。 */
+#app .VPNavBar .divider {
+  display: none;
+}
+
+#app .VPNav::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  height: 1px;
+  background-color: var(--vp-c-divider);
+}
+
 /* 导航脱离文档流后，内容区补上等高间距（桌面端原本就有，这里补齐移动端） */
 #app .VPContent {
   padding-top: var(--vp-nav-height);
 }
 
-/* 抽屉从页头下方开始，首项不会被压住；桌面端原本就是同样的值 */
+/* 抽屉/侧边栏的盒子本身从页头下方开始。
+   只靠 padding-top 把内容压下去是不够的：盒子的背景与右边框仍会从屏幕顶端
+   延伸下来，暗色主题下会看到一条竖线把页头切开。 */
 #app .VPSidebar {
-  padding-top: var(--vp-nav-height);
+  top: var(--vp-nav-height);
+  /* 直接顶住页头下沿，不留空白带 */
+  padding-top: 0;
   border-right: 1px solid var(--vp-c-divider);
+}
+
+/* 侧边栏左右内边距从 32px 收到 20px，减少左侧空白 */
+#app .VPSidebar {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+#app .VPSidebar .group {
+  width: 100%;
+}
+
+/* 第一组保留自身的 10px 内边距，与组间距一致；不再额外压紧 */
+
+/* 顶部遮挡层原用于盖住滚到页头下方的内容；侧边栏已在页头下方，
+   它的负外边距反而会把第一项顶出可视区、上半截被裁掉，直接去掉 */
+#app .VPSidebar .curtain {
+  display: none;
 }
 
 /* 移动端的「本页目录」条贴在页头下沿，而不是钻进页头里 */
@@ -72,6 +122,52 @@
   text-wrap: balance;
 }
 
+/* ------------------------------------------------------------------
+   正文列宽
+
+   默认主题的正文列被写死成 688px（.VPDoc.has-aside .content-container），
+   宽屏上两侧会剩下大片空白，这里放宽到 800px。
+   左右内边距保持主题默认（32px），不做覆盖。
+   ------------------------------------------------------------------ */
+
+/* 没有右侧目录的页面（如列表页）也加一个上限，避免超宽屏上每行过长 */
+#app .VPDoc .content-container {
+  max-width: 900px;
+}
+
+#app .VPDoc.has-aside .content-container {
+  /* 800 + 右侧目录 256 = 1056，在 1440 视口下仍有余量；
+     再大就会挤压目录，导致标题被省略号截断 */
+  max-width: 800px;
+}
+
+/* 目录标题单行显示，超出部分省略号；
+   完整内容由 .outline-link 自带的 title 属性在悬停时以浮层显示。 */
+#app .VPDocAsideOutline .outline-link {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+}
+
+/* 正文容器 .VPDoc 的左右内边距归零（默认 32px），
+   只影响这一层，内部 .content 的内边距保持不变 */
+@media (min-width: 960px) {
+  #app .VPDoc.has-sidebar.has-aside {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* 超宽屏（≥1440）时主题会给内容区补一段居中留白：
+   padding-right = (100vw - 1440) / 2，1600 宽就是 80px。
+   这里固定为 32px，与正文两侧的常规留白一致。 */
+@media (min-width: 1440px) {
+  #app .VPContent.has-sidebar {
+    padding-right: 32px;
+  }
+}
+
 /* 代码块圆角，浅色主题下也有一点边界感 */
 .vp-doc div[class*='language-'] {
   border-radius: 8px;
@@ -84,3 +180,9 @@
   overflow-x: auto;
   background: transparent;
 }
+
+
+
+
+
+

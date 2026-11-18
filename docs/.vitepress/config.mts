@@ -91,8 +91,8 @@ function buildSidebar() {
   const known = Object.keys(TOPIC_LABELS).filter((topic) => topics.includes(topic));
   const rest = topics.filter((topic) => !known.includes(topic));
 
+  // 只放主题分组：每个一级条目结构一致，不会出现「唯一直链」比别的高一截
   return [
-    { text: '索引', items: [{ text: '全部笔记', link: '/notes/' }] },
     ...[...known, ...rest].map((topic) => ({
       text: TOPIC_LABELS[topic] ?? topic,
       collapsed: false,
@@ -177,6 +177,7 @@ export default withMermaid(
     base,
     head: [
       ['link', { rel: 'alternate', type: 'application/rss+xml', title: '学习笔记', href: `${base}rss.xml` }],
+      ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }],
     ],
     async buildEnd(siteConfig) {
       await writeRss(siteConfig.outDir);
@@ -196,12 +197,28 @@ export default withMermaid(
     // 草稿目录不参与构建，也不会进入搜索索引
     srcExclude: ['**/_drafts/**'],
 
+    vite: {
+      optimizeDeps: {
+        /**
+         * mermaid 依赖的 fastdom 是 CJS，开发模式下 Vite 不预构建它，
+         * 会抛 "does not provide an export named 'default'"，导致整个页面白屏。
+         * 生产构建由 Rollup 做 CJS 互操作，所以只有 dev 会坏——显式预构建即可。
+         */
+        include: ['fastdom', 'fastdom/extensions/fastdom-promised.js'],
+      },
+    },
+
     markdown: {
       math: true,
       theme: { light: 'github-light', dark: 'github-dark' },
     },
 
     themeConfig: {
+      logo: {
+        light: '/logo.svg',
+        dark: '/logo-dark.svg',
+        alt: 'strata',
+      },
       topicLabels: TOPIC_LABELS,
       nav: [
         { text: '笔记', link: '/notes/' },
